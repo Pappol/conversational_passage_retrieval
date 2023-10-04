@@ -1,3 +1,4 @@
+import numpy as np
 import os.path
 import pickle
 
@@ -8,61 +9,64 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from rank_bm25 import BM25Okapi
 from tqdm import tqdm
+import re
 
 
 def preprocess_text(text, stop_words):
     """Tokenize, lowercase, and remove stopwords from the text."""
-    tokens = word_tokenize(text.lower())
+    # tokens = word_tokenize(text.lower())
+    # tok_sent = [word for word in tokens if word not in stop_words and word.isalpha()]
+    # return tok_sent
+
+    clean_text = re.sub(r'[^a-z]', ' ', text.lower())
+    tokens = word_tokenize(clean_text)
     tok_sent = [word for word in tokens if word not in stop_words and word.isalpha()]
-    return tok_sent
+    if len(tok_sent) == 0:
+        # print("Empty tokienized string: ", text)
+        return ['and'] # use a stop word as special token
+    return tok_sent #' '.join(tok_sent)
 
 
-def multiprocess_preprocess_joblib(data, column_name, n_jobs):
+def multiprocess_preprocess_joblib(data, column_name, stop_words, n_jobs=30):
     """Preprocess data using multiple processes with joblib."""
 
     # Using joblib's Parallel and delayed to run preprocessing in parallel
-    tasks = (delayed(preprocess_text)(text) for text in data[column_name])
+    tasks = (delayed(preprocess_text)(text, stop_words) for text in data[column_name])
     processed_data = Parallel(n_jobs=n_jobs)(tasks)
     return processed_data
 
 
-def load_train_queries():
-    train_queries = None
-    if not os.path.isfile('data/preprocessed_queries_train.csv'):
+def load_train_queries(stop_words):
+    if not os.path.isfile('data/preprocessed_queries_train.tsv'):
         print('Preprocessing train queries...')
-        train_queries = pd.read_csv('data/queries_train.csv', sep=',')
-        train_queries['processed_query'] = multiprocess_preprocess_joblib(train_queries, 'query')
-        train_queries = train_queries.drop(columns=['query'])
-        train_queries = train_queries.rename(columns={'processed_query': 'query'})
-        train_queries.to_csv('data/preprocessed_queries_train.csv', index=False)
-    else: 
+        train_querys = pd.read_csv('data/queries_train.csv', sep=',')
+        train_querys['processed_query'] = multiprocess_preprocess_joblib(train_querys, 'query', stop_words)
+        train_querys = train_querys.drop(columns=['query'])
+        train_querys = train_querys.rename(columns={'processed_query': 'query'})
+        train_querys.to_csv('data/preprocessed_queries_train.tsv', sep='\t', index=False)
+    else:
         print('Loading preprocessed train queries...')
-        train_queries = pd.read_csv('data/preprocessed_queries_train.csv')
-    return train_queries
+        train_querys = pd.read_csv('data/preprocessed_queries_train.tsv', sep='\t')
+    return train_querys
 
-
-def load_test_queries():
-    test_queries = None
-    if not os.path.isfile('data/preprocessed_queries_test.csv'):
+def load_test_queries(stop_words):
+    if not os.path.isfile('data/preprocessed_queries_test.tsv'):
         print('Preprocessing test queries...')
-        test_queries = pd.read_csv('data/queries_test.csv', sep=',')
-        test_queries['processed_query'] = multiprocess_preprocess_joblib(test_queries, 'query')
-        test_queries = test_queries.drop(columns=['query'])
-        test_queries = test_queries.rename(columns={'processed_query': 'query'})
-        test_queries.to_csv('data/preprocessed_queries_test.csv', index=False)
+        test_querys = pd.read_csv('data/queries_test.csv', sep=',')
+        test_querys['processed_query'] = multiprocess_preprocess_joblib(test_querys, 'query', stop_words)
+        test_querys = test_querys.drop(columns=['query'])
+        test_querys = test_querys.rename(columns={'processed_query': 'query'})
+        test_querys.to_csv('data/preprocessed_queries_test.tsv', sep='\t', index=False)
     else:
         print('Loading preprocessed test queries...')
-        test_queries = pd.read_csv('data/preprocessed_queries_test.csv')
-    return test_queries
+        test_querys = pd.read_csv('data/preprocessed_queries_test.tsv', sep='\t')
+    return test_querys
 
-
-def load_dataset():
-    dataset = None
-    # if data/preprocessed_collection.tsv does not exist, create it
+def load_dataset(stop_words):
     if not os.path.isfile('data/preprocessed_collection.tsv'):
         print('Preprocessing collection...')
         dataset = pd.read_csv('data/collection.tsv', sep='\t', names=['id', 'text'])
-        dataset['processed_text'] = multiprocess_preprocess_joblib(dataset, 'text')
+        dataset['processed_text'] = multiprocess_preprocess_joblib(dataset, 'text', stop_words)
         dataset = dataset.drop(columns=['text'])
         dataset = dataset.rename(columns={'processed_text': 'text'})
         dataset.to_csv('data/preprocessed_collection.tsv', sep='\t', index=False)
@@ -74,12 +78,13 @@ def load_dataset():
         dataset = dataset.dropna()
     return dataset
 
+
 def load_index(dataset):
     # if pickle index is not present load it
     if not os.path.isfile('data/bm25_index.pkl'):
         print("Index data not present, creating...")
         bm25 = BM25Okapi(dataset['text'])
-        with open('data/bm25_index.pickle', 'wb') as handle:
+        with open('data/bm25_index.pkl', 'wb') as handle:
             pickle.dump(bm25, handle, protocol=pickle.HIGHEST_PROTOCOL)
     else:
         print("Loading index data...")
@@ -96,10 +101,10 @@ def generate_trec_runfile(dataset, ranking_results, run_identifier, output_file)
                 # Construct the turn identifier from the qid
                 topic_id, turn_id = qid.split("_")
                 turn_identifier = f"{topic_id}_{turn_id}"
-                
+
                 # Retrieve the document ID from the collection using the passage index
                 doc_id = dataset.iloc[passage_idx]['id']
-                
+
                 # Write the formatted line to the file
                 file.write(f"{turn_identifier} Q0 {doc_id} {rank} {score} {run_identifier}\n")
 
@@ -118,7 +123,7 @@ def retrieve_rankings_score(row, bm25, top_k):
 def main():
     query_type = None
     while query_type not in ['test', 'train']:
-        query_type = input("Enter test/train")
+        query_type = input("Enter test/train: ")
 
     # Downloading stopwords (just a mock step since we don't have internet access here)
     nltk.download('stopwords')
@@ -130,23 +135,22 @@ def main():
     stop_words.remove('about')
 
     # Retrieve top 1000 passages for each query in test_queries
-    ranking_results_new = {}
     top_k = 1000
     run_id_new = "BM25_integration_run"
 
     ranking_results_dict = {}
 
-    dataset = load_dataset()
+    dataset = load_dataset(stop_words)
     bm25 = load_index(dataset)
 
-    queries = load_train_queries() if query_type == 'train' else load_test_queries()
+    queries = load_train_queries(stop_words) if query_type == 'train' else load_test_queries(stop_words)
     for _, row in tqdm(queries.iterrows(), total=queries.shape[0]):
         qid, top_indices = retrieve_rankings_score(row, bm25, top_k)
         ranking_results_dict[qid] = top_indices
 
     # Generate the TREC runfile using the results
     output_filename_parallel = f"data/trec_runfile_{query_type}_parallel.txt"
-    generate_trec_runfile(ranking_results_dict, run_id_new, output_filename_parallel)
+    generate_trec_runfile(dataset, ranking_results_dict, run_id_new, output_filename_parallel)
 
 
 if __name__ == '__main__':
