@@ -3,13 +3,15 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
+  - pip
   - pytest
   - ipykernel
+  - jupyter
   - numpy
   - pandas
   - scikit-learn
   - nltk
   - sqlitedict
-  - jupyter
   - matplotlib
-prefix: /Users/mares/miniforge3/envs/dat640
+  - pip:
+    - rank-bm25
