@@ -1,5 +1,11 @@
 # conversational_passage_retrieval
 
+# Running the baseline
+
+```
+python3 baseline.py
+```
+
 ## Environment setup
 
 To install from environment file run:
