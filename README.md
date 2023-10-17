@@ -15,4 +15,7 @@ conda env create -f environment.yml
 
 # TREC eval tool
 
-https://trec.nist.gov/trec_eval/
+```
+git clone https://github.com/usnistgov/trec_eval.git
+make
+```
