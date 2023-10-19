@@ -189,7 +189,7 @@ def main():
         ranking_results_dict[qid] = top_indices
 
     # Generate the TREC runfile using the results
-    output_filename_parallel = f"data/trec_runfile_{query_type}_parallel.txt"
+    output_filename_parallel = f"data/trec_runfile_{query_type}.txt"
     generate_trec_runfile(dataset, ranking_results_dict, run_id_new, output_filename_parallel)
 
 
