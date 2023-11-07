@@ -13,5 +13,6 @@ dependencies:
   - nltk
   - sqlitedict
   - matplotlib
+  - transformers
   - pip:
     - rank-bm25

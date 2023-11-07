@@ -23,9 +23,11 @@ def preprocess_text(text, stop_words, stemmer):
 
     # tokenize and remove stopwords
     tokens = word_tokenize(clean_text)
-    tokens = [stemmer.stem(word) for word in tokens]
-    
     tok_sent = [word for word in tokens if word not in stop_words and word.isalpha()]
+
+    # apply the lemmatization
+    tok_sent = [stemmer.lemmatize(word) for word in tok_sent]
+
 
 
     if len(tok_sent) == 0:
@@ -175,10 +177,11 @@ def main():
     # Downloading stopwords (just a mock step since we don't have internet access here)
     nltk.download('stopwords')
     nltk.download('punkt')
+    nltk.download('wordnet')
 
     # We'll use a predefined list of English stopwords.
     stop_words = set(stopwords.words('english'))
-    stemmer = nltk.stem.PorterStemmer()
+    stemmer = nltk.stem.WordNetLemmatizer()
 
     # Retrieve top 1000 passages for each query in test_queries
     top_k = 1000
