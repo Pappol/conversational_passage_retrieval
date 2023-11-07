@@ -12,7 +12,7 @@ from tqdm import tqdm
 import re
 
 
-def preprocess_text(text, stop_words):
+def preprocess_text(text, stop_words, stemmer):
     """
     This function preprocesses the text by keeping only alphabetic characters,
     removing stopwords and lowercasing the text.
@@ -23,6 +23,8 @@ def preprocess_text(text, stop_words):
 
     # tokenize and remove stopwords
     tokens = word_tokenize(clean_text)
+    tokens = [stemmer.stem(word) for word in tokens]
+    
     tok_sent = [word for word in tokens if word not in stop_words and word.isalpha()]
 
 
@@ -35,58 +37,59 @@ def preprocess_text(text, stop_words):
     return tok_sent #' '.join(tok_sent)
 
 
-def multiprocess_preprocess_joblib(data, column_name, stop_words, n_jobs=30):
+def multiprocess_preprocess_joblib(data, column_name, stop_words, stemmer, n_jobs=30):
     """Preprocess data using multiple processes to speed up the work"""
 
     # using parallel and delayed to run preprocessing in parallel
-    tasks = (delayed(preprocess_text)(text, stop_words) for text in data[column_name])
+    tasks = (delayed(preprocess_text)(text, stop_words, stemmer) for text in data[column_name])
     processed_data = Parallel(n_jobs=n_jobs)(tasks)
     return processed_data
 
 
-def load_train_queries(stop_words):
+def load_train_queries(stop_words, stemmer, use_rewritten_query=False):
     """
     This function loads the train queries and preprocesses them.
     """
-
+    filename = 'queries_train_gpt4' if use_rewritten_query else 'queries_train'
     # look if preprocessed queries are present
-    if not os.path.isfile('data/preprocessed_queries_train.tsv'):
+    if not os.path.isfile(f'data/preprocessed_{filename}.tsv'):
         print('Preprocessing train queries...')
-        train_querys = pd.read_csv('data/queries_train.csv', sep=',')
-        train_querys['processed_query'] = multiprocess_preprocess_joblib(train_querys, 'query', stop_words)
+        train_querys = pd.read_csv(f'data/{filename}.csv', sep=',')
+        train_querys['processed_query'] = multiprocess_preprocess_joblib(train_querys, 'query', stop_words, stemmer)
         # rename columns
         train_querys = train_querys.drop(columns=['query'])
         train_querys = train_querys.rename(columns={'processed_query': 'query'})
         # save preprocessed collection to tsv file (for correct format of lists)
-        train_querys.to_csv('data/preprocessed_queries_train.tsv', sep='\t', index=False)
+        train_querys.to_csv(f'data/preprocessed_{filename}.tsv', sep='\t', index=False)
     else:
         # if preprocessed queries are present, load them
         print('Loading preprocessed train queries...')
-        train_querys = pd.read_csv('data/preprocessed_queries_train.tsv', sep='\t')
+        train_querys = pd.read_csv(f'data/preprocessed_{filename}.tsv', sep='\t')
     return train_querys
 
-def load_test_queries(stop_words):
+def load_test_queries(stop_words, stemmer, use_rewritten_query):
     """
     This function loads the test queries and preprocesses them.
     """
+    filename = 'queries_test_gpt4' if use_rewritten_query else 'queries_test'
 
     # look if preprocessed queries are present
-    if not os.path.isfile('data/preprocessed_queries_test.tsv'):
+    if not os.path.isfile(f'data/preprocessed_{filename}.tsv'):
         print('Preprocessing test queries...')
-        test_querys = pd.read_csv('data/queries_test.csv', sep=',')
-        test_querys['processed_query'] = multiprocess_preprocess_joblib(test_querys, 'query', stop_words)
+        test_querys = pd.read_csv(f'data/{filename}.csv', sep=',')
+        test_querys['processed_query'] = multiprocess_preprocess_joblib(test_querys, 'query', stop_words, stemmer)
         # rename columns
         test_querys = test_querys.drop(columns=['query'])
         test_querys = test_querys.rename(columns={'processed_query': 'query'}) 
         # save preprocessed collection to tsv file (for correct format of lists)
-        test_querys.to_csv('data/preprocessed_queries_test.tsv', sep='\t', index=False)
+        test_querys.to_csv(f'data/preprocessed_{filename}.tsv', sep='\t', index=False)
     else:
         # if preprocessed queries are present, load them
         print('Loading preprocessed test queries...')
-        test_querys = pd.read_csv('data/preprocessed_queries_test.tsv', sep='\t')
+        test_querys = pd.read_csv(f'data/preprocessed_{filename}.tsv', sep='\t')
     return test_querys
 
-def load_dataset(stop_words):
+def load_dataset(stop_words, stemmer):
     """
     This function loads the collection and preprocesses it.
     """
@@ -95,7 +98,7 @@ def load_dataset(stop_words):
     if not os.path.isfile('data/preprocessed_collection.tsv'):
         print('Preprocessing collection...')
         dataset = pd.read_csv('data/collection.tsv', sep='\t', names=['id', 'text'])
-        dataset['processed_text'] = multiprocess_preprocess_joblib(dataset, 'text', stop_words)
+        dataset['processed_text'] = multiprocess_preprocess_joblib(dataset, 'text', stop_words, stemmer)
         # rename columns
         dataset = dataset.drop(columns=['text'])
         dataset = dataset.rename(columns={'processed_text': 'text'})
@@ -163,14 +166,19 @@ def main():
     while query_type not in ['test', 'train']:
         query_type = input("Enter test/train: ")
 
+    use_rewritten = None
+    while use_rewritten not in ['true', 'false']:
+        use_rewritten = input("Enter true or false for query rewriting: ")
+    
+    use_rewritten = True if use_rewritten == 'true' else False
+
     # Downloading stopwords (just a mock step since we don't have internet access here)
     nltk.download('stopwords')
     nltk.download('punkt')
 
     # We'll use a predefined list of English stopwords.
     stop_words = set(stopwords.words('english'))
-    # remove 'about' from stopwords
-    stop_words.remove('about')
+    stemmer = nltk.stem.PorterStemmer()
 
     # Retrieve top 1000 passages for each query in test_queries
     top_k = 1000
@@ -178,10 +186,10 @@ def main():
 
     ranking_results_dict = {}
 
-    dataset = load_dataset(stop_words)
+    dataset = load_dataset(stop_words, stemmer)
     bm25 = load_index(dataset)
 
-    queries = load_train_queries(stop_words) if query_type == 'train' else load_test_queries(stop_words)
+    queries = load_train_queries(stop_words, stemmer, use_rewritten) if query_type == 'train' else load_test_queries(stop_words, stemmer, use_rewritten)
 
     # loop over the queries and retrieve the top 1000 passages for each query
     for _, row in tqdm(queries.iterrows(), total=queries.shape[0]):
@@ -189,7 +197,8 @@ def main():
         ranking_results_dict[qid] = top_indices
 
     # Generate the TREC runfile using the results
-    output_filename_parallel = f"data/trec_runfile_{query_type}.txt"
+    qr_text = '_qr' if use_rewritten else ''
+    output_filename_parallel = f"data/trec_runfile_{query_type}{qr_text}_parallel.txt"
     generate_trec_runfile(dataset, ranking_results_dict, run_id_new, output_filename_parallel)
 
 
