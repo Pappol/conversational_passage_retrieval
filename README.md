@@ -17,13 +17,15 @@ To install from environment file run:
 conda env create -f environment.yml
 ```
 
-## Running the baseline
+## Code execution
+
+### Running the baseline
 
 ```
 python3 baseline.py
 ```
 
-## Question rewriting using Chat-GPT4
+### Question rewriting using Chat-GPT4
 
 Rewritten queries are already stored among the other input data.
 [queries_test_qr.csv](data%2Fqueries_test_qr.csv)
@@ -56,7 +58,7 @@ Rewritten Queries :
 
 In both cases you will have to copy the content of every set of query for each topic in the chat window and copy the output in a new file. GPT-4 can handle all the queries at once, but we did not tried with GPT-3.5.
 
-## SPLADE
+### SPLADE
 
 1. Clone the [SPLADE repository](https://github.com/naver/splade).
 2. Create the SPLADE environment according to the instructions.
