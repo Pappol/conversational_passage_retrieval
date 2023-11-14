@@ -2,7 +2,7 @@ from tqdm import tqdm
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from collections import defaultdict
-
+import torch
 
 def get_relevance_dict(path):
     """
@@ -27,7 +27,7 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
     This function reranks the documents in the runfile using the given model.
     """
 
-    device = 'mps'
+    device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     model = model.to(device)
 
     for key, doc_ids in tqdm(res_dict.items()):
