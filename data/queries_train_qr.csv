@@ -1,0 +1,254 @@
+qid,query,topic_number,turn_number
+4_1,Overview of the Neolithic Revolution,4,1
+4_2,Start and end dates of the Neolithic Revolution,4,2
+4_3,Causes of the Neolithic Revolution's beginning,4,3
+4_4,Inventions during the Neolithic Revolution,4,4
+4_5,Tools used during the Neolithic Revolution,4,5
+4_6,Introduction of the Neolithic Revolution to the British Isles,4,6
+4_7,Overview of the period following the Neolithic Revolution,4,7
+4_8,Significance of the Neolithic Revolution,4,8
+4_9,Houses during the Neolithic Revolution,4,9
+17_1,Different forms of energy,17,1
+17_2,Methods to store energy,17,2
+17_3,Type of energy used in motion,17,3
+17_4,Overview of mechanical energy,17,4
+17_5,Examples of mechanical energy,17,5
+17_6,Reason why sound is a form of mechanical energy,17,6
+17_7,Differences between mechanical energy and potential energy,17,7
+17_8,Comparison between potential and kinetic energy,17,8
+17_9,Category to which chemical energy belongs,17,9
+17_10,Type of energy used during eating,17,10
+18_1,Overview of the planet Uranus,18,1
+18_2,Unique characteristics of Uranus,18,2
+18_3,Details of Uranus's orbit,18,3
+18_4,Reasons for Uranus's tilt,18,4
+18_5,Differences in rotation of Uranus compared to other planets,18,5
+18_6,Peculiarities of Uranus's seasons,18,6
+18_7,Planets similar to Uranus,18,7
+18_8,Characteristics of the planet Neptune,18,8
+18_9,Importance of Neptune to our solar system,18,9
+18_10,Similarities between Uranus and Neptune,18,10
+18_11,Possibility of life existence on Uranus and Neptune,18,11
+22_1,Most common spices used in cooking,22,1
+22_2,Differences between spices and herbs,22,2
+22_3,Reasons why spices taste good,22,3
+22_4,Origins of most commonly used spices,22,4
+22_5,Cuisines that heavily use spices,22,5
+22_6,Most popular spices in Indian cuisine,22,6
+22_7,Overview of turmeric as a spice,22,7
+22_8,Benefits of consuming turmeric,22,8
+22_9,Oldest spice known to history,22,9
+22_10,Most expensive spice and reasons for its cost,22,10
+24_1,Methods to help someone quit smoking,24,1
+24_2,Long term effects of smoking,24,2
+24_3,Link between smoking and cancer,24,3
+24_4,Reasons for the addictiveness of smoking,24,4
+24_5,Alternatives to nicotine for quitting smoking,24,5
+24_6,Efficacy of nicotine patches in smoking cessation,24,6
+24_7,Overview of the cold turkey method for quitting smoking,24,7
+24_8,Typical withdrawal symptoms from quitting smoking,24,8
+27_1,Components of a balanced diet,27,1
+27_2,Differences in balanced diet recommendations for men and women,27,2
+27_3,Specific dietary recommendations for women,27,3
+27_4,Importance of dairy products for good health,27,4
+27_5,Potential harms of consuming dairy products,27,5
+27_6,Significance of fiber in a balanced diet,27,6
+27_7,Effects of consuming fiber in smaller amounts than recommended,27,7
+30_1,Advantages of using Linux operating system,30,1
+30_2,Running Windows software on Linux,30,2
+30_3,Comparison between Linux and Windows operating systems,30,3
+30_4,Popularity comparison between Linux and Windows,30,4
+30_5,Method to install software on Linux,30,5
+30_6,Easy ways to install Python on Linux,30,6
+30_7,Methods for sharing files on Linux,30,7
+40_1,Origins of popular music,40,1
+40_2,Characteristics of popular music,40,2
+40_3,Technological developments that enabled the rise of popular music,40,3
+40_4,History and reasons for people taking popular music seriously,40,4
+40_5,Integration of popular music into music education,40,5
+40_6,Influential bands in popular music,40,6
+40_7,Characteristics of a pop punk song,40,7
+40_8,Difference between pop punk and emo music,40,8
+49_1,Origins and history of Netflix,49,1
+49_2,Original operation and model of Netflix,49,2
+49_3,Relationship between Netflix and Blockbuster,49,3
+49_4,Transition of Netflix from DVD rentals to streaming service,49,4
+49_5,Competitors of Netflix in the streaming industry,49,5
+49_6,Comparison between Netflix and Amazon Prime Video,49,6
+49_7,Netflix subscriber growth trends over the years,49,7
+49_8,Impact of Netflix on television consumption patterns,49,8
+50_1,First artificial satellite in space,50,1
+50_2,Types of satellite orbits,50,2
+50_3,Important classifications of satellites,50,3
+50_4,Working mechanism of satellite navigation systems,50,4
+50_5,Overview and significance of the Galileo satellite system,50,5
+50_6,Tensions between the Galileo system and the US,50,6
+50_7,Definition and description of Cubesats,50,7
+50_8,Advantages of using Cubesats,50,8
+54_1,Top attractions in Washington D.C.,54,1
+54_2,Most popular Smithsonian museums in Washington D.C.,54,2
+54_3,Significance of the National Air and Space Museum in Washington D.C.,54,3
+54_4,Admission cost for the Spy Museum in Washington D.C.,54,4
+54_5,Activities in Washington D.C. after museum hours,54,5
+54_6,Best time to visit the reflecting pools in Washington D.C.,54,6
+54_7,Famous foods of Washington D.C.,54,7
+54_8,Definition and description of a DC half smoke,54,8
+54_9,History of the DC half smoke,54,9
+56_1,Summary of Darwin's theory of evolution,56,1
+56_2,Development process of Darwin's theory of evolution,56,2
+56_3,Effects of sexual and asexual reproduction on Darwin's theory,56,3
+56_4,Role of fossils in understanding Darwin's theory of evolution,56,4
+56_5,Modern evidence supporting Darwin's theory of evolution,56,5
+56_6,Impact of Darwin's theory on contemporary biology,56,6
+56_7,Comparison between microevolution and macroevolution,56,7
+56_8,Relationship between Darwin's theory and speciation,56,8
+58_1,Definition of a real-time database,58,1
+58_2,Differences between real-time and traditional databases,58,2
+58_3,Advantages of real-time data processing,58,3
+58_4,Key examples of real-time databases,58,4
+58_5,Significant applications of real-time databases,58,5
+58_6,Top cloud-based real-time database options,58,6
+58_7,Overview of the Firebase real-time database,58,7
+58_8,Usage of Firebase real-time database in mobile applications,58,8
+61_1,Introduction to The Avengers superhero team,61,1
+61_2,First appearance of The Avengers in comics,61,2
+61_3,Most powerful Avenger and reasons for their strength,61,3
+61_4,Relationship between Spider-Man and The Avengers team,61,4
+61_5,Reasons Batman is not a member of The Avengers,61,5
+61_6,Significant superhero team in the DC universe,61,6
+61_7,Origins and history of the Justice League in comics,61,7
+61_8,Key members of the Justice League,61,8
+69_1,Methods to sleep well after experiencing jet lag,69,1
+69_2,Efficacy of melatonin in combating jet lag,69,2
+69_3,Discovery and history of melatonin,69,3
+69_4,Food sources rich in melatonin,69,4
+69_5,Potential harms of melatonin consumption,69,5
+69_6,Side effects of melatonin,69,6
+69_7,Reasons for melatonin prescription requirement in the UK,69,7
+69_8,Natural methods to increase melatonin levels,69,8
+69_9,Efficacy of melatonin in treating insomnia,69,9
+69_10,Effectiveness of melatonin in treating anxiety,69,10
+75_1,Reason for the shared name between turkey (bird) and Turkey (country),75,1
+75_2,Origins of the turkey bird,75,2
+75_3,Significance of turkeys in native cultures,75,3
+75_4,History and process of turkey domestication,75,4
+75_5,Flying capabilities of turkeys,75,5
+75_6,Ben Franklin's rationale for proposing the turkey as the national symbol,75,6
+75_8,Reasons for consuming turkey on Thanksgiving,75,8
+79_1,Core concepts and topics covered in sociology,79,1
+79_2,Major contributions of Auguste Comte to sociology,79,2
+79_3,Role and significance of positivism in sociological thought,79,3
+79_4,Herbert Spencer's key theories and ideas in sociology,79,4
+79_5,Comparative analysis of the works of Comte and Spencer,79,5
+79_6,Explanation and components of the functionalist theory,79,6
+79_7,Criticisms and counterarguments against functionalism,79,7
+79_8,Comparison between functionalist theory and conflict theory,79,8
+79_9,Contemporary applications and examples of conflict theory,79,9
+82_1,Overview of GMO food labeling practices and regulations,82,1
+82_2,Advantages and benefits of GMO food labeling,82,2
+82_3,Disadvantages and concerns related to GMO food labeling,82,3
+82_4,European Union's guidelines and regulations on GMO food labeling,82,4
+82_5,Explanation and features of traceability tools for GMOs,82,5
+82_6,Role and contributions of Co-Extra in GMO traceability,82,6
+82_7,Testing methodologies for detecting GMO contamination,82,7
+82_8,Differences in GMO labeling approaches between Europe and the US,82,8
+82_9,Mechanisms and principles behind DNA-based GMO detection methods,82,9
+82_10,Potential improvements Co-Extra could bring to GMO detection,82,10
+83_1,Fascinating facts about bees and their behavior,83,1
+83_2,Reasons behind honey's long shelf life and resistance to spoilage,83,2
+83_3,Factors contributing to the declining bee populations,83,3
+83_4,Strategies and measures to protect and revive bee populations,83,4
+83_5,Changes and threats to bee habitats in recent years,83,5
+83_6,Actions individuals can take to help address the bee decline,83,6
+83_7,Investigation into the causes of Colony Collapse Disorder (CCD),83,7
+83_8,Potential ecological and agricultural consequences of bee extinction,83,8
+84_1,Principles and mechanics of seed investment in startups,84,1
+84_2,Details and characteristics of angel investment rounds,84,2
+84_3,Comparison between traditional seed investment and crowdfunding,84,3
+84_4,Typical amounts raised during Series A investment rounds,84,4
+84_5,Risks associated with investing in early-stage startups,84,5
+84_6,Different financial instruments used by venture capitalists,84,6
+85_1,Price range and factors influencing the cost of used Lamborghinis,85,1
+85_2,Comparative analysis of Lamborghini and Ferrari in the used market,85,2
+85_3,Estimated costs and features of fully-equipped food trucks,85,3
+85_4,Required licenses and permits for operating a food truck,85,4
+85_5,Criteria and considerations for selecting a food truck location,85,5
+85_6,Day-to-day operations and challenges of running a food truck,85,6
+85_7,Strategies and best practices for successful food truck business,85,7
+85_8,Successful food truck business models and case studies,85,8
+85_9,Factors behind the success of certain food truck businesses,85,9
+86_1,Climate characteristics and patterns in Utah,86,1
+86_2,Specific climatic conditions of Salt Lake City and its uniqueness,86,2
+86_3,Primary economic sectors and activities in Salt Lake City,86,3
+86_4,Legacy and impact of the 2002 Winter Olympics on Salt Lake City,86,4
+86_5,Key ski locations utilized during the 2002 Winter Olympics,86,5
+86_6,Major non-ski events and festivals in Salt Lake City,86,6
+86_7,Popular attractions and activities in Salt Lake City during non-winter months,86,7
+90_1,Identification of the largest commercial airplane by passenger capacity or size,90,1
+90_2,Operational costs associated with flying the largest commercial plane,90,2
+90_3,Fuel consumption comparison of the largest commercial plane vs its competitors,90,3
+90_4,Comparison between freighter versions of major commercial planes,90,4
+90_5,Reasons behind the discontinuation of the Airbus A380 production,90,5
+90_6,Boeing's competitive response to the introduction of the A380,90,6
+90_7,Features and advantages of the latest versions of large commercial planes,90,7
+90_8,Distinct features and specifications of different aircraft variants,90,8
+91_1,Purpose and objectives of the General Data Protection Regulation (GDPR),91,1
+91_2,Key changes introduced by GDPR compared to previous data protection laws,91,2
+91_3,Privacy implications of certain technologies under GDPR,91,3
+91_4,Range of personal data categories as defined by GDPR including IP addresses,91,4
+91_5,Adaptation strategies of major companies to GDPR requirements,91,5
+91_6,Privacy concerns related to the use of social networking platforms,91,6
+91_7,Value exchange between users and social networks concerning data privacy,91,7
+91_8,Signs and implications of social media addiction,91,8
+92_1,Efficacy and purpose of shoulder braces in injury recovery,92,1
+92_2,Exercises designed to aid shoulder recovery and strengthen muscles,92,2
+92_3,Additional exercises beneficial for shoulder rehabilitation,92,3
+92_4,Signs and indicators of serious shoulder injuries,92,4
+92_5,Criteria for considering surgical intervention for shoulder injuries,92,5
+92_6,Non-invasive pain management techniques for shoulder discomfort,92,6
+92_7,Tips for minimizing shoulder pain while working at a desk,92,7
+96_1,Steps and ingredients for preparing Japanese Yakiniku,96,1
+96_3,Top Yakiniku restaurants in Tokyo based on reviews and reputation,96,3
+96_4,Three-star Michelin sushi restaurants in Tokyo and their specialties,96,4
+96_5,Reservation policies of elite sushi restaurants in Tokyo,96,5
+96_6,Popular attractions and activities in Tokyo for tourists and locals,96,6
+96_7,Cost of living comparison between Tokyo and New York City,96,7
+96_8,Salary benchmarks for foreign law firms operating in Tokyo,96,8
+101_1,Melania Trump's religious beliefs and affiliations,101,1
+101_2,Melania Trump's career and activities before marriage,101,2
+101_3,Information about Melania Trump's children and family,101,3
+101_4,Age and details about Melania Trump's son,101,4
+101_5,History and significance of the Kit Kat Club where Melania met Donald Trump,101,5
+101_6,Start of Melania Trump's modeling career and notable milestones,101,6
+101_7,Salary and compensation details for the First Lady of the United States,101,7
+101_8,Professional and personal details about Ivanka Trump,101,8
+101_9,Professional and personal details about Jared Kushner,101,9
+101_10,Jared Kushner's roles and responsibilities at the White House,101,10
+103_1,Reasons behind the Grateful Dead's live performance legacy,103,1
+103_2,Grateful Dead's policy on live recordings and its impact,103,2
+103_3,Details about the Grateful Dead's chart-topping songs or albums,103,3
+103_4,Leadership and key members of the Grateful Dead,103,4
+103_5,Circumstances surrounding Jerry Garcia's missing finger,103,5
+103_6,Relationship between the Grateful Dead and Jefferson Airplane,103,6
+103_8,Songwriting credits and details for the song "Touch of Grey",103,8
+103_9,Notable songs and contributions of the Grateful Dead's primary songwriters,103,9
+103_10,Factors leading to the breakup or dissolution of the Grateful Dead,103,10
+104_1,Prominent researchers in the field of Information Retrieval,104,1
+104_3,Notable British researchers in Information Retrieval and their contributions,104,3
+104_4,Key contributions to the evaluation in Information Retrieval,104,4
+104_6,Influence of early Information Retrieval research on modern initiatives,104,6
+104_7,Overview and purpose of the TREC initiative,104,7
+104_8,Recent tasks and challenges presented at TREC,104,8
+104_9,Introduction and significance of e-Discovery in Information Retrieval,104,9
+104_10,Components and features of a typical test collection in Information Retrieval,104,10
+104_12,Performance measures specific to web search engines,104,12
+104_13,Measures for evaluating online search engine performance,104,13
+105_1,Origins and beginnings of the Black Lives Matter movement,105,1
+105_2,Details about incidents that sparked the Black Lives Matter movement,105,2
+105_3,Legal and societal reasons for the acquittal in pivotal cases,105,3
+105_4,Details surrounding the incident involving Michael Brown,105,4
+105_5,Individuals responsible for coining and popularizing the Black Lives Matter slogan,105,5
+105_6,Public and governmental reactions to the rise of the Black Lives Matter movement,105,6
+105_7,Overview of movements supporting police in response to Black Lives Matter,105,7
+105_8,Details and motivations behind attacks on law enforcement officers,105,8
+105_9,Broader goals and principles of the Black Lives Matter movement,105,9

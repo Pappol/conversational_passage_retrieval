@@ -1,7 +1,7 @@
 /.idea/
-/data/
 /trec_eval-9.0.7/
 
+/data/collection.tsv  # too big
 **/__pycache__/
 .DS_Store
 /ConvDR
