@@ -23,7 +23,18 @@ conda env create -f environment.yml
 python3 baseline.py
 ```
 
+## Question rewriting using Chat-GPT4
+
+Output is stored among the other input data.
+[queries_test_qr.csv](data%2Fqueries_test_qr.csv)
+[queries_train_qr.csv](data%2Fqueries_train_qr.csv)
+
 ## SPLADE
+
+
+
+Move our collection to `data/msmarco/full_collection/raw.tsv`
+
 
 ```
 conf/config_splade++_cocondenser_ensembledistil_OURS.yaml
