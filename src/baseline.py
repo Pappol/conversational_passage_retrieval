@@ -1,7 +1,6 @@
 import numpy as np
 import os.path
 import pickle
-
 import nltk
 import pandas as pd
 from joblib import Parallel, delayed

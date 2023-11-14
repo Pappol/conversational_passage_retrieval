@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # Replace these file paths with your actual file paths
     tsv_input_file_path = f'data/run.queries_{type}_custom_collection_gpt4_splade.tsv'
     csv_mapping_file_path = f'data/queries_{type}_gpt4.csv'
-    output_file_path = f'data/trec_runfile_{type}_custom_collection_qr_splade.txt'
+    output_file_path = f'data/trec_runfile_{type}_qr_splade.txt'
 
     # Step 1: Read the CSV file into a DataFrame and create a mapping dictionary
     mapping_df = pd.read_csv(csv_mapping_file_path)
