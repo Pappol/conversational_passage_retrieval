@@ -44,6 +44,9 @@ def main(args):
 
 
     elif args.model=='a':
+        if args.pre_process:
+            splade_preprocess(dataset_path)
+        
         res_path = f'{dataset_path}trec_runfile_{type}{qr_text}_{ranker}.txt'
         # path for the query
         query_path = f'{dataset_path}queries_{type}{qr_text}.csv'
@@ -72,12 +75,11 @@ def main(args):
         # rerank the documents
         rerank(out_path, res_dict, queries, collection, tokenizer, model)
 
-
 if __name__ == '__main__':
     parser = ap.ArgumentParser()
-    parser.add_argument('--preprocess', type=bool, default=False, help='Preprocess the data')
+    parser.add_argument('--pre_process', type=bool, default=False, help='Preprocess the dataset fro splade format')
     parser.add_argument('--model', type=str, choices=['a', 'b'], default='a', help='b for baseline and a for advanced model')
-    parser.add_argument('--type', type=str, choices=['train', 'test'], default='test', help='Type of queries to convert either "train" or "test"')
+    parser.add_argument('--type', type=str, choices=['train', 'test'], default='train', help='Type of queries to convert either "train" or "test"')
     parser.add_argument('--qr', type=bool, default=True, help='Use rewritten queries')
     parser.add_argument('--dataset', type=str, default='../data/', help='Path to the dataset')
     parser.add_argument('--output', type=str, default='../res/', help='Path to the output file')

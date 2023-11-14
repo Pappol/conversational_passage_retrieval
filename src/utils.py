@@ -364,3 +364,24 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
         with open(out_path, 'a') as f:
             for i, (doc_id, score) in enumerate(sorted_scores):
                 f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')
+
+def splade_preprocess(path):
+    """
+    This function preprocesses the queries changing to the format required by SPLADE.
+
+    Parameters:
+    path (str): Path to the file containing the queries to be preprocessed.
+
+    Returns:
+    None: The function does not return any value. It saves the preprocessed queries to a new file.
+    """
+
+    csv_path = os.path.join(path, 'queries_train.csv')
+    output_path = os.path.join(path, 'queries_train_splade.csv')
+    df = pd.read_csv(csv_path)
+    df[['query']].to_csv(output_path, sep='\t', header=False, index=True)
+
+    csv_path = os.path.join(path, 'queries_train_qr.csv')
+    output_path = os.path.join(path, 'queries_train_qr_splade.csv')
+    df = pd.read_csv(csv_path)
+    df[['query']].to_csv(output_path, sep='\t', header=False, index=True)
