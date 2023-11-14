@@ -86,7 +86,7 @@ def main():
         ranker = input("Enter bm25 or splade: ")
     ranker = '_' + ranker
 
-    qr_text = '_qr' if use_rewritten == 'true' else ''
+    qr_text = '_qr' if use_rewritten else ''
 
     # path for the runfile
     res_path = f'res/runfile_{type}{qr_text}{ranker}.txt'
