@@ -1,9 +1,13 @@
-# conversational_passage_retrieval
+# Conversational Passage Retrieval
 
-# Running the baseline
+This is a repo focused on conversational passage retrieval for course DAT640 at the University of Stavanger. 
 
+## Downloading collection
 ```
-python3 baseline.py
+mkdir data
+wget --output-document data/msmarco-passage.tar.gz https://gustav1.ux.uis.no/dat640/msmarco-passage.tar.gz
+tar -xzvf data/msmarco-passage.tar.gz -C data/
+rm msmarco-passage.tar.gz
 ```
 
 ## Environment setup
@@ -13,7 +17,13 @@ To install from environment file run:
 conda env create -f environment.yml
 ```
 
-# Evaluation
+## Running the baseline
+
+```
+python3 baseline.py
+```
+
+## Evaluation
 
 For evaluation we are using the TREC eval tool.
 
