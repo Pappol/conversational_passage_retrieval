@@ -57,6 +57,7 @@ Rewritten Queries :
 ```
 
 In both cases you will have to copy the content of every set of query for each topic in the chat window and copy the output in a new file. GPT-4 can handle all the queries at once, but we did not tried with GPT-3.5.
+The file with the rewritten queries is included in the repository [queries_test_qr.csv](data%2Fqueries_test_qr.csv) and [queries_train_qr.csv](data%2Fqueries_train_qr.csv) and can be used directly.
 
 ### SPLADE
 
@@ -86,6 +87,9 @@ python3 -m splade.retrieve \
   config.out_dir=experiments/pre-trained/out
 ```
 
+## Re-ranking
+TODO
+
 ## Evaluation
 
 For evaluation we are using the TREC eval tool.
@@ -96,3 +100,7 @@ cd trec_eval
 make
 ./trec_eval -c -m recall.1000 -m map -m recip_rank -m ndcg_cut.3 -l2 -M1000 qrels_train.txt {YOUR_TREC_RUNFILE}
 ```
+
+## Pre run files
+
+In order not to run the whole pipeline, we have included all the results form the different methods in the folder [res](res). Including the scores as a csv file [scores.csv](res%2Fscores.csv) and the jupiter notebook to generate the plots [plots.ipynb](res%2Fplots.ipynb) to visualize the results.
