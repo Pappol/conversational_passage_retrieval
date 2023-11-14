@@ -12,6 +12,8 @@ def main(args):
     ranker = args.ranking
 
     qr_text = '_qr' if use_rewritten else ''
+    res_folder = args.res
+
     
     if args.model == 'b':
         download_if_not_exists('corpora/stopwords')
@@ -46,14 +48,14 @@ def main(args):
         if args.pre_process:
             splade_preprocess(dataset_path)
         
-        res_path = f'{dataset_path}trec_runfile_{type}{qr_text}_{ranker}.txt'
+        res_path = f'{res_folder}runfile_{query_type}{qr_text}_{ranker}.txt'
         # path for the query
-        query_path = f'{dataset_path}queries_{type}{qr_text}.csv'
+        query_path = f'{dataset_path}queries_{query_type}{qr_text}.csv'
 
         # path for the documents
         docs_path = f'{dataset_path}collection.tsv'
         # path where to save the reranked file
-        out_path = f'{dataset_path}trec_runfile_{type}{qr_text}_{ranker}_reranked.txt'
+        out_path = f'{res_folder}runfile_{query_type}{qr_text}_{ranker}_reranked.txt'
 
         # load the model from huggingface
         tokenizer = AutoTokenizer.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")
@@ -84,6 +86,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='../data/', help='Path to the dataset')
     parser.add_argument('--output', type=str, default='../res/', help='Path to the output file')
     parser.add_argument('--ranking', type=str, choices=['bm25', 'splade'], default='splade', help='Ranking method to use')
+    parser.add_argument('--res', type=str, default='../res/', help='Path to preprocessed dataset')
     args = parser.parse_args()
 
     main(args)
