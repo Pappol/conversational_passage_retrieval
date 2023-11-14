@@ -35,7 +35,6 @@ def convert_splade_json_to_trec_runfile(json_path, csv_path, out_path):
     output_df.to_csv(out_path, sep=' ', index=False, header=False, mode='w')
 
 
-
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print("Expecting 3 arguments: source json file path, source csv file path and destination TREC runfile path.")

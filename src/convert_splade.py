@@ -1,6 +1,7 @@
 import pandas as pd
 import argparse as ap
 
+
 if __name__ == '__main__':
     parser = ap.ArgumentParser()
     parser.add_argument('--type', type=str, default='test', help='Type of queries to convert')

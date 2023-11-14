@@ -3,6 +3,7 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from collections import defaultdict
 
+
 def get_relevance_dict(path):
     """
     This function returns a dictionary with key = query_id and value = list of relevant doc_id 
@@ -19,7 +20,6 @@ def get_relevance_dict(path):
         res_dict[row['query_id']].append(row['doc_id'])
 
     return res_dict
-
 
 
 def rerank(out_path, res_dict, queries, collection, tokenizer, model):
@@ -65,7 +65,6 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
             for i, (doc_id, score) in enumerate(sorted_scores):
                 f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')
 
-        
 
 def main():
     type = None
