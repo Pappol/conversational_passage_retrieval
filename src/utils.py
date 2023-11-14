@@ -11,6 +11,7 @@ from tqdm import tqdm
 import re
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from collections import defaultdict
+import torch
 
 def preprocess_text(text, stop_words, stemmer):
     """
@@ -84,7 +85,7 @@ def load_train_queries(stop_words, stemmer, dataset_path, use_rewritten_query=Fa
       from there, otherwise, it preprocesses and then returns the data.
 
     """
-    filename = 'queries_train_gpt4' if use_rewritten_query else 'queries_train'
+    filename = 'queries_train_qr' if use_rewritten_query else 'queries_train'
     csv_filename = os.path.join(dataset_path, f'{filename}.csv')
     tsv_filename = os.path.join(dataset_path, f'{filename}.tsv')
     path = os.path.join(dataset_path,'preprocessed_', f'{filename}.tsv')
@@ -104,7 +105,7 @@ def load_train_queries(stop_words, stemmer, dataset_path, use_rewritten_query=Fa
         train_querys = pd.read_csv(tsv_filename, sep='\t')
     return train_querys
 
-def load_test_queries(stop_words, stemmer, use_rewritten_query):
+def load_test_queries(stop_words, stemmer, dataset_path, use_rewritten_query):
     """
     This function loads the test queries and preprocesses them.
 
@@ -119,22 +120,23 @@ def load_test_queries(stop_words, stemmer, use_rewritten_query):
       it loads from there, otherwise, it preprocesses and then returns the data.
 
     """
-    filename = 'queries_test_gpt4' if use_rewritten_query else 'queries_test'
-
+    filename = 'queries_test_qr' if use_rewritten_query else 'queries_test'
+    tsv_path = os.path.join(dataset_path, f'preprocessed_{filename}.tsv')
+    csv_path = os.path.join(dataset_path, f'preprocessed_{filename}.csv')
     # look if preprocessed queries are present
-    if not os.path.isfile(f'data/preprocessed_{filename}.tsv'):
+    if not os.path.isfile(tsv_path):
         print('Preprocessing test queries...')
-        test_querys = pd.read_csv(f'data/{filename}.csv', sep=',')
+        test_querys = pd.read_csv(csv_path, sep=',')
         test_querys['processed_query'] = multiprocess_preprocess_joblib(test_querys, 'query', stop_words, stemmer)
         # rename columns
         test_querys = test_querys.drop(columns=['query'])
         test_querys = test_querys.rename(columns={'processed_query': 'query'}) 
         # save preprocessed collection to tsv file (for correct format of lists)
-        test_querys.to_csv(f'data/preprocessed_{filename}.tsv', sep='\t', index=False)
+        test_querys.to_csv(tsv_path, sep='\t', index=False)
     else:
         # if preprocessed queries are present, load them
         print('Loading preprocessed test queries...')
-        test_querys = pd.read_csv(f'data/preprocessed_{filename}.tsv', sep='\t')
+        test_querys = pd.read_csv(tsv_path, sep='\t')
     return test_querys
 
 
@@ -279,3 +281,86 @@ def download_if_not_exists(package):
         # If not, download the package
         nltk.download(package.split('/')[1])
         print(f"Downloaded '{package}'.")
+
+
+def get_relevance_dict(path):
+    """
+    This function returns a dictionary with key = query_id and value = list of relevant doc_id 
+
+    Parameters:
+    path (str): Path to the TREC relevance file. This file should be in a format where each line contains 
+                columns representing 'query_id', 'Q0', 'doc_id', 'rank', 'score', and 'run_name'.
+
+    Returns:
+    dict: A dictionary where each key is a 'query_id' and its value is a list of 'doc_id's. 
+          These 'doc_id's are ordered according to their rank in the relevance file.
+    """
+
+    results = pd.read_csv(path, sep=' ', header=None)
+    results.columns = ['query_id', 'Q0', 'doc_id', 'rank', 'score', 'run_name']
+
+    # create a dictionary with key = query_id and value = list of doc_id
+    # the list of doc_id is ordered by rank
+
+    res_dict = defaultdict(list)    
+    for _, row in results.iterrows():
+        res_dict[row['query_id']].append(row['doc_id'])
+
+    return res_dict
+
+
+
+def rerank(out_path, res_dict, queries, collection, tokenizer, model):
+    """
+    This function reranks the documents in the runfile using the given model.
+    
+    Parameters:
+    out_path (str): Path to the output file where the reranked results will be written.
+    res_dict (dict): A dictionary with keys as query IDs and values as lists of document IDs to be reranked.
+    queries (pandas.DataFrame): A dataframe containing queries with their IDs.
+    collection (pandas.DataFrame): A dataframe containing the text of the documents.
+    tokenizer (Tokenizer): A tokenizer object compatible with the provided model, used for encoding the queries and documents.
+    model (Model): The neural network model used for reranking.
+
+    Returns:
+    None: The function does not return any value. It updates the output file with reranked document IDs 
+          and their associated scores using the specified model.
+    """
+
+    device = 'cuda' if torch.cuda.is_available() else 'mps'
+    model = model.to(device)
+
+    for key, doc_ids in tqdm(res_dict.items()):
+        # if the file already contains the key, skip it
+        with open(out_path, 'r') as f:
+            if key in f.read():
+                print(f'Query {key} already in the file')
+                continue
+            
+        # read the query
+        query = queries.loc[key]['query']
+        scores = {}
+        for doc_id in doc_ids:
+            # read the document
+            doc = collection.loc[doc_id]['text']
+            # encode the query and the document
+            encoding = tokenizer(query, doc, return_tensors='pt', truncation=True).to(device)
+
+            # truncate the document to 512 tokens
+            if encoding['input_ids'].shape[1] > 512:
+                encoding['input_ids'] = encoding['input_ids'][:, :512]
+                encoding['token_type_ids'] = encoding['token_type_ids'][:, :512]
+                encoding['attention_mask'] = encoding['attention_mask'][:, :512]
+
+            # rerank the document
+            output = model(**encoding)
+            # update the score in the dataframe
+            scores[doc_id] = output.logits[0][1].item()
+
+        # sort the dictionary by value
+        sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+        # update the file with the ordered documents
+        with open(out_path, 'a') as f:
+            for i, (doc_id, score) in enumerate(sorted_scores):
+                f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')

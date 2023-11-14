@@ -4,10 +4,14 @@ import argparse as ap
 def main(args):
 
     query_type = args.type
-    use_rewritten = args.use_rewritten_query
+    use_rewritten = args.qr
 
     dataset_path = args.dataset
     output_path = args.output
+
+    ranker = args.ranking
+
+    qr_text = '_qr' if use_rewritten else ''
     
     if args.model=='b':
         download_if_not_exists('corpora/stopwords')
@@ -35,18 +39,49 @@ def main(args):
             ranking_results_dict[qid] = top_indices
 
         # Generate the TREC runfile using the results
-        qr_text = '_qr' if use_rewritten else ''
         output_filename_parallel = f'{output_path}{run_id_new}_{query_type}{qr_text}.txt'
         generate_trec_runfile(dataset, ranking_results_dict, run_id_new, output_filename_parallel)
+
+
+    elif args.model=='a':
+        res_path = f'{dataset_path}trec_runfile_{type}{qr_text}_{ranker}.txt'
+        # path for the query
+        query_path = f'{dataset_path}queries_{type}{qr_text}.csv'
+
+        # path for the documents
+        docs_path = f'{dataset_path}collection.tsv'
+        # path where to save the reranked file
+        out_path = f'{dataset_path}trec_runfile_{type}{qr_text}_{ranker}_reranked.txt'
+
+        # load the model from huggingface
+        tokenizer = AutoTokenizer.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")
+        model = AutoModelForSequenceClassification.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")
+
+        # load the queries
+        queries = pd.read_csv(query_path)
+        queries = queries.set_index('qid')
+
+        # load the collection
+        collection = pd.read_csv(docs_path, sep='\t', header=None)
+        collection.columns = ['doc_id', 'text']
+        collection = collection.set_index('doc_id')
+
+        # load the runfile
+        res_dict = get_relevance_dict(res_path)
+
+        # rerank the documents
+        rerank(out_path, res_dict, queries, collection, tokenizer, model)
+
 
 if __name__ == '__main__':
     parser = ap.ArgumentParser()
     parser.add_argument('--preprocess', type=bool, default=False, help='Preprocess the data')
     parser.add_argument('--model', type=str, choices=['a', 'b'], default='a', help='b for baseline and a for advanced model')
     parser.add_argument('--type', type=str, choices=['train', 'test'], default='test', help='Type of queries to convert either "train" or "test"')
-    parser.add_argument('--use_rewritten_query', type=bool, default=True, help='Use rewritten queries')
+    parser.add_argument('--qr', type=bool, default=True, help='Use rewritten queries')
     parser.add_argument('--dataset', type=str, default='../data/', help='Path to the dataset')
     parser.add_argument('--output', type=str, default='../res/', help='Path to the output file')
+    parser.add_argument('--ranking', type=str, choices=['bm25', 'splade'], default='splade', help='Ranking method to use')
     args = parser.parse_args()
 
     main(args)
