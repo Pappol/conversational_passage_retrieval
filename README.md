@@ -25,9 +25,36 @@ python3 baseline.py
 
 ## Question rewriting using Chat-GPT4
 
-Output is stored among the other input data.
+Rewritten queries are already stored among the other input data.
 [queries_test_qr.csv](data%2Fqueries_test_qr.csv)
 [queries_train_qr.csv](data%2Fqueries_train_qr.csv)
+
+
+To run the question rewriting using Chat-GPT4, you can use our custom GPT instance at the following link: https://chat.openai.com/g/g-R920EZnY6-query-rewriting-gpt
+
+If you do not have the Plus subscription you can still give a try with the free ChatGPT3.5 using the following message as first message:
+``` 
+You are tasked with the role of " Query Rewriter " for a
+Conversational Passage Retrieval system . In conversational
+queries , subsequent questions may lack essential details
+present in prior interactions . Your goal is to integrate
+context from previous queries to rewrite the current query
+into a more detailed and standalone search query . This will
+ensure that the rewritten query is optimized for retrieving
+the most relevant passage , even without the conversational
+context .
+Example :
+Conversational Queries :
+- Tell me about the International Linguistics Olympiad .
+- How do I prepare for it ?
+- How tough is the exam ?
+Rewritten Queries :
+- International Linguistics Olympiad overview .
+- Preparation methods for the International Linguistics Olympiad .
+- Difficulty level of the International Linguistics Olympiad exam .
+```
+
+In both cases you will have to copy the content of every set of query for each topic in the chat window and copy the output in a new file. GPT-4 can handle all the queries at once, but we did not tried with GPT-3.5.
 
 ## SPLADE
 
