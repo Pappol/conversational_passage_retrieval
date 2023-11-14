@@ -80,17 +80,18 @@ def main():
     ranker = None
     while ranker not in ['bm25', 'splade']:
         ranker = input("Enter bm25 or splade: ")
+        ranker = '_' + ranker
 
     qr_text = '_qr' if use_rewritten == 'true' else ''
 
     # path for the runfile
-    res_path = f'data/trec_runfile_{type}{qr_text}_{ranker}.txt'
+    res_path = f'res/runfile_{type}{qr_text}{ranker}.txt'
     # path for the query
-    query_path = f'data/queries_{type}_gpt4.csv'
+    query_path = f'data/queries_{type}{qr_text}.csv'
     # path for the documents
     docs_path = 'data/collection.tsv'
     # path where to save the file
-    out_path = f'data/trec_runfile_{type}{qr_text}_{ranker}_reranked.txt'
+    out_path = f'data/runfile_{type}{qr_text}{ranker}_rr.txt'
 
     # load the model from huggingface
     tokenizer = AutoTokenizer.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")
