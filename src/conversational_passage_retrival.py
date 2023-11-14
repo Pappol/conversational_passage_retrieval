@@ -2,7 +2,6 @@ from utils import *
 import argparse as ap
 
 def main(args):
-
     query_type = args.type
     use_rewritten = args.qr
 
