@@ -236,7 +236,7 @@ def retrieve_rankings_score(row, bm25, top_k):
               b. score (float): The BM25 score of the passage for the given query.
            The list contains the top k passages ranked according to their BM25 scores.
     """
-    
+
     qid = row['qid']
     query_text = row['query']
 
@@ -245,3 +245,29 @@ def retrieve_rankings_score(row, bm25, top_k):
     top_scores = [scores[i] for i in top_indices]
 
     return qid, list(zip(top_indices, top_scores))
+
+def download_if_not_exists(package):
+    """
+    Checks if a specified NLTK package is already downloaded and available locally. 
+    If the package is not available, it downloads the package.
+
+    Parameters:
+    package (str): The NLTK package name to check and download if necessary. 
+                   The package name should be specified in the format 'category/package_name', 
+                   for example, 'corpora/stopwords' for the stopwords package, 
+                   'tokenizers/punkt' for the Punkt Tokenizer Models, and 
+                   'corpora/wordnet' for the WordNet.
+
+    Returns:
+    None: The function does not return any value. It prints a message indicating whether 
+          the package was already downloaded or has been downloaded during the execution.
+    """
+    
+    try:
+        # Check if the package is already downloaded
+        nltk.data.find(package)
+        print(f"'{package}' is already downloaded.")
+    except LookupError:
+        # If not, download the package
+        nltk.download(package.split('/')[1])
+        print(f"Downloaded '{package}'.")
