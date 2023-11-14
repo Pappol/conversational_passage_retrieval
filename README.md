@@ -23,6 +23,12 @@ conda env create -f environment.yml
 python3 baseline.py
 ```
 
+## SPLADE
+
+```
+conf/config_splade++_cocondenser_ensembledistil_OURS.yaml
+```
+
 ## Evaluation
 
 For evaluation we are using the TREC eval tool.
