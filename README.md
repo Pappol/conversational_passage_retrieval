@@ -58,13 +58,30 @@ In both cases you will have to copy the content of every set of query for each t
 
 ## SPLADE
 
-
-
-Move our collection to `data/msmarco/full_collection/raw.tsv`
-
-
+1. Clone the [SPLADE repository](https://github.com/naver/splade).
+2. Create the SPLADE environment according to the instructions.
+3. Move our collection to `data/msmarco/full_collection/raw.tsv` in the SPLADE repository.
+4. Move our configuration file [config_splade++_cocondenser_ensembledistil_OURS.yaml](config%2Fconfig_splade%2B%2B_cocondenser_ensembledistil_OURS.yaml) to `conf/config_splade++_cocondenser_ensembledistil_OURS.yaml`
+5. Prepare the environment:
 ```
-conf/config_splade++_cocondenser_ensembledistil_OURS.yaml
+conda activate splade_env
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+export SPLADE_CONFIG_NAME="config_splade++_cocondenser_ensembledistil"
+```
+6. Run indexing:
+```
+python3 -m splade.index \
+  init_dict.model_type_or_dir=naver/splade-cocondenser-ensembledistil \
+  config.pretrained_no_yamlconfig=true \
+  config.index_dir=experiments/pre-trained/index
+```
+7. Run ranking:
+```
+python3 -m splade.retrieve \
+  init_dict.model_type_or_dir=naver/splade-cocondenser-ensembledistil \
+  config.pretrained_no_yamlconfig=true \
+  config.index_dir=experiments/pre-trained/index \
+  config.out_dir=experiments/pre-trained/out
 ```
 
 ## Evaluation
