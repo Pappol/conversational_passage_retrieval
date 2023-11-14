@@ -33,11 +33,14 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
 
     for key, doc_ids in tqdm(res_dict.items()):
         # if the file already contains the key, skip it
-        with open(out_path, 'r') as f:
-            if key in f.read():
-                print(f'Query {key} already in the file')
-                continue
-            
+        try:
+            with open(out_path, 'r') as f:
+                if key in f.read():
+                    print(f'Query {key} already in the file')
+                    continue
+        except FileNotFoundError:
+            pass
+
         # read the query
         query = queries.loc[key]['query']
         scores = {}
