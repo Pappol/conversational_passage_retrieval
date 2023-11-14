@@ -13,6 +13,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from collections import defaultdict
 import torch
 
+
 def preprocess_text(text, stop_words, stemmer):
     """
     This function preprocesses the text by keeping only alphabetic characters,
@@ -104,6 +105,7 @@ def load_train_queries(stop_words, stemmer, dataset_path, use_rewritten_query=Fa
         print('Loading preprocessed train queries...')
         train_querys = pd.read_csv(tsv_filename, sep='\t')
     return train_querys
+
 
 def load_test_queries(stop_words, stemmer, dataset_path, use_rewritten_query):
     """
@@ -201,6 +203,7 @@ def load_index(dataset, path):
             bm25 = pickle.load(f)
     return bm25
 
+
 def generate_trec_runfile(dataset, ranking_results, run_identifier, output_file):
     """
     Generate a TREC runfile using the given ranking results.
@@ -256,6 +259,7 @@ def retrieve_rankings_score(row, bm25, top_k):
 
     return qid, list(zip(top_indices, top_scores))
 
+
 def download_if_not_exists(package):
     """
     Checks if a specified NLTK package is already downloaded and available locally. 
@@ -307,7 +311,6 @@ def get_relevance_dict(path):
         res_dict[row['query_id']].append(row['doc_id'])
 
     return res_dict
-
 
 
 def rerank(out_path, res_dict, queries, collection, tokenizer, model):
@@ -364,6 +367,7 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
         with open(out_path, 'a') as f:
             for i, (doc_id, score) in enumerate(sorted_scores):
                 f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')
+
 
 def splade_preprocess(path):
     """
