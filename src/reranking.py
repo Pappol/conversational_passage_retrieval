@@ -29,6 +29,7 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
 
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     model = model.to(device)
+    model.eval()  # we are just evaluating
 
     for key, doc_ids in tqdm(res_dict.items()):
         # if the file already contains the key, skip it
@@ -61,7 +62,7 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
         sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
         # update the file with the ordered documents
-        with open(out_path, 'a') as f:
+        with open(out_path, 'a+') as f:
             for i, (doc_id, score) in enumerate(sorted_scores):
                 f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')
 
@@ -91,7 +92,7 @@ def main():
     # path for the documents
     docs_path = 'data/collection.tsv'
     # path where to save the file
-    out_path = f'data/runfile_{type}{qr_text}{ranker}_rr.txt'
+    out_path = f'res/runfile_{type}{qr_text}{ranker}_rr.txt'
 
     # load the model from huggingface
     tokenizer = AutoTokenizer.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")
