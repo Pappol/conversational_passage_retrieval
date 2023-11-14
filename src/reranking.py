@@ -90,12 +90,16 @@ def main():
 
     # path for the runfile
     res_path = f'res/runfile_{type}{qr_text}{ranker}.txt'
+    print(f"{res_path=}")
     # path for the query
     query_path = f'data/queries_{type}{qr_text}.csv'
+    print(f"{query_path=}")
     # path for the documents
     docs_path = 'data/collection.tsv'
+    print(f"{docs_path=}")
     # path where to save the file
     out_path = f'res/runfile_{type}{qr_text}{ranker}_rr.txt'
+    print(f"{out_path=}")
 
     # load the model from huggingface
     tokenizer = AutoTokenizer.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")
