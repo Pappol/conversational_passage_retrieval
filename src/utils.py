@@ -69,7 +69,7 @@ def multiprocess_preprocess_joblib(data, column_name, stop_words, stemmer, n_job
     return processed_data
 
 
-def load_train_queries(stop_words, stemmer, use_rewritten_query=False):
+def load_train_queries(stop_words, stemmer, dataset_path, use_rewritten_query=False):
     """
     This function loads the train queries and preprocesses them.
 
@@ -85,20 +85,23 @@ def load_train_queries(stop_words, stemmer, use_rewritten_query=False):
 
     """
     filename = 'queries_train_gpt4' if use_rewritten_query else 'queries_train'
+    csv_filename = os.path.join(dataset_path, f'{filename}.csv')
+    tsv_filename = os.path.join(dataset_path, f'{filename}.tsv')
+    path = os.path.join(dataset_path,'preprocessed_', f'{filename}.tsv')
     # look if preprocessed queries are present
-    if not os.path.isfile(f'data/preprocessed_{filename}.tsv'):
+    if not os.path.isfile(path):
         print('Preprocessing train queries...')
-        train_querys = pd.read_csv(f'data/{filename}.csv', sep=',')
+        train_querys = pd.read_csv(csv_filename, sep=',')
         train_querys['processed_query'] = multiprocess_preprocess_joblib(train_querys, 'query', stop_words, stemmer)
         # rename columns
         train_querys = train_querys.drop(columns=['query'])
         train_querys = train_querys.rename(columns={'processed_query': 'query'})
         # save preprocessed collection to tsv file (for correct format of lists)
-        train_querys.to_csv(f'data/preprocessed_{filename}.tsv', sep='\t', index=False)
+        train_querys.to_csv(tsv_filename, sep='\t', index=False)
     else:
         # if preprocessed queries are present, load them
         print('Loading preprocessed train queries...')
-        train_querys = pd.read_csv(f'data/preprocessed_{filename}.tsv', sep='\t')
+        train_querys = pd.read_csv(tsv_filename, sep='\t')
     return train_querys
 
 def load_test_queries(stop_words, stemmer, use_rewritten_query):
@@ -135,13 +138,14 @@ def load_test_queries(stop_words, stemmer, use_rewritten_query):
     return test_querys
 
 
-def load_dataset(stop_words, stemmer):
+def load_dataset(stop_words, stemmer, dataset_path):
     """
     This function loads the collection and preprocesses it.
 
     Parameters:
     stop_words (list of str): A list of words to be excluded during preprocessing.
     stemmer (Stemmer object): An object that provides stemming functionality to reduce words to their root form.
+    dataset_path (str): The path to the dataset file.
 
     Returns:
     pandas.DataFrame: A dataframe containing the preprocessed text data. If a preprocessed collection already exists,
@@ -149,23 +153,26 @@ def load_dataset(stop_words, stemmer):
     """
 
     # look if preprocessed collection is present
-    if not os.path.isfile('data/preprocessed_collection.tsv'):
+    collection_path = os.path.join(dataset_path, 'collection.tsv')
+    preprocess_path = os.path.join(dataset_path, 'preprocessed_collection.tsv')
+
+    if not os.path.isfile(collection_path):
         print('Preprocessing collection...')
-        dataset = pd.read_csv('data/collection.tsv', sep='\t', names=['id', 'text'])
+        dataset = pd.read_csv(collection_path, sep='\t', names=['id', 'text'])
         dataset['processed_text'] = multiprocess_preprocess_joblib(dataset, 'text', stop_words, stemmer)
         # rename columns
         dataset = dataset.drop(columns=['text'])
         dataset = dataset.rename(columns={'processed_text': 'text'})
         # save preprocessed collection to tsv file (for correct format of lists)
-        dataset.to_csv('data/preprocessed_collection.tsv', sep='\t', index=False)
+        dataset.to_csv(preprocess_path, sep='\t', index=False)
     else:
         # if preprocessed collection is present, load it
         print('Loading preprocessed collection...')
-        dataset = pd.read_csv('data/preprocessed_collection.tsv', sep='\t')
+        dataset = pd.read_csv(preprocess_path, sep='\t')
     return dataset
 
 
-def load_index(dataset):
+def load_index(dataset, path):
     """
     This function loads the index or creates it if it is not present.
 
@@ -178,16 +185,17 @@ def load_index(dataset):
                it is loaded; otherwise, a new index is created from the provided dataset and then returned.
     
     """
+    path = os.path.join(path, 'bm25_index.pkl')
     # if pickle index is not present load it
-    if not os.path.isfile('data/bm25_index.pkl'):
+    if not os.path.isfile(path):
         print("Index data not present, creating...")
         # create the index with the BM25Okapi class
         bm25 = BM25Okapi(dataset['text'])
-        with open('data/bm25_index.pkl', 'wb') as handle:
+        with open(path, 'wb') as handle:
             pickle.dump(bm25, handle, protocol=pickle.HIGHEST_PROTOCOL)
     else:
         print("Loading index data...")
-        with open('data/bm25_index.pkl', 'rb') as f:
+        with open(path, 'rb') as f:
             bm25 = pickle.load(f)
     return bm25
 

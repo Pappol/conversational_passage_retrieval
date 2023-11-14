@@ -2,10 +2,14 @@ from utils import *
 import argparse as ap
 
 def main(args):
-    if args.model=='b':
-        query_type = args.type
-        use_rewritten = args.use_rewritten_query
 
+    query_type = args.type
+    use_rewritten = args.use_rewritten_query
+
+    dataset_path = args.dataset
+    output_path = args.output
+    
+    if args.model=='b':
         download_if_not_exists('corpora/stopwords')
         download_if_not_exists('tokenizers/punkt')
         download_if_not_exists('corpora/wordnet')
@@ -20,10 +24,10 @@ def main(args):
 
         ranking_results_dict = {}
 
-        dataset = load_dataset(stop_words, stemmer)
-        bm25 = load_index(dataset)
+        dataset = load_dataset(stop_words, stemmer, dataset_path)
+        bm25 = load_index(dataset, dataset_path)
 
-        queries = load_train_queries(stop_words, stemmer, use_rewritten) if query_type == 'train' else load_test_queries(stop_words, stemmer, use_rewritten)
+        queries = load_train_queries(stop_words, stemmer,dataset_path, use_rewritten) if query_type == 'train' else load_test_queries(stop_words, stemmer, dataset_path, use_rewritten)
 
         # loop over the queries and retrieve the top 1000 passages for each query
         for _, row in tqdm(queries.iterrows(), total=queries.shape[0]):
@@ -32,7 +36,7 @@ def main(args):
 
         # Generate the TREC runfile using the results
         qr_text = '_qr' if use_rewritten else ''
-        output_filename_parallel = f"data/trec_runfile_{query_type}{qr_text}_parallel.txt"
+        output_filename_parallel = f'{output_path}{run_id_new}_{query_type}{qr_text}.txt'
         generate_trec_runfile(dataset, ranking_results_dict, run_id_new, output_filename_parallel)
 
 if __name__ == '__main__':
