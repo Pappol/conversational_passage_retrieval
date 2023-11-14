@@ -14,7 +14,7 @@ rm msmarco-passage.tar.gz
 
 To install from environment file run:
 ```
-conda env create -f environment.yml
+conda env create -f environment.yaml
 ```
 
 ## Code execution

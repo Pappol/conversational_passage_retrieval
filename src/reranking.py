@@ -80,7 +80,7 @@ def main():
     ranker = None
     while ranker not in ['bm25', 'splade']:
         ranker = input("Enter bm25 or splade: ")
-        ranker = '_' + ranker
+    ranker = '_' + ranker
 
     qr_text = '_qr' if use_rewritten == 'true' else ''
 
