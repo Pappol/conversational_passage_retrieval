@@ -3,6 +3,7 @@ import argparse as ap
 
 
 def main(args):
+    print(f"{args=}")
     query_type = args.type
     use_rewritten = args.qr
 
@@ -47,7 +48,7 @@ def main(args):
     elif args.model == 'a':
         if args.pre_process:
             splade_preprocess(dataset_path)
-        
+
         res_path = f'{res_folder}runfile_{query_type}{qr_text}_{ranker}.txt'
         # path for the query
         query_path = f'{dataset_path}queries_{query_type}{qr_text}.csv'

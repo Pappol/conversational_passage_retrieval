@@ -160,7 +160,7 @@ def load_dataset(stop_words, stemmer, dataset_path):
     collection_path = os.path.join(dataset_path, 'collection.tsv')
     preprocess_path = os.path.join(dataset_path, 'preprocessed_collection.tsv')
 
-    if not os.path.isfile(collection_path):
+    if not os.path.isfile(preprocess_path):
         print('Preprocessing collection...')
         dataset = pd.read_csv(collection_path, sep='\t', names=['id', 'text'])
         dataset['processed_text'] = multiprocess_preprocess_joblib(dataset, 'text', stop_words, stemmer)
@@ -370,6 +370,7 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
         with open(out_path, 'a+') as f:
             for i, (doc_id, score) in enumerate(sorted_scores):
                 f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')
+
 
 def splade_preprocess(path):
     """
