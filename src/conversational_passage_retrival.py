@@ -55,7 +55,7 @@ def main(args):
         # path for the documents
         docs_path = f'{dataset_path}collection.tsv'
         # path where to save the reranked file
-        out_path = f'{res_folder}runfile_{query_type}{qr_text}_{ranker}_reranked.txt'
+        out_path = f'{res_folder}runfile_{query_type}{qr_text}_{ranker}_rr.txt'
 
         # load the model from huggingface
         tokenizer = AutoTokenizer.from_pretrained("amberoad/bert-multilingual-passage-reranking-msmarco")

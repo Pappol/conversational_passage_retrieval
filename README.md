@@ -2,6 +2,21 @@
 
 This is a repo focused on conversational passage retrieval for course DAT640 at the University of Stavanger. 
 
+# Table of Contents
+1. [Conversational Passage Retrieval](#conversational-passage-retrieval)
+2. [Downloading Collection](#downloading-collection)
+3. [Environment Setup](#environment-setup)
+4. [Code Execution](#code-execution)
+   - [Running the Baseline](#running-the-baseline)
+   - [Re-ranking](#re-ranking)
+5. [Main Runner](#main-runner)
+   - [Parser Argument Documentation](#parser-argument-documentation)
+7. [Question Rewriting Using Chat-GPT4](#question-rewriting-using-chat-gpt4)
+8. [SPLADE](#splade)
+9. [Evaluation](#evaluation)
+10. [Pre Run Files](#pre-run-files)
+
+
 ## Downloading collection
 ```
 mkdir data
@@ -24,6 +39,73 @@ conda env create -f environment.yaml
 ```
 python3 baseline.py
 ```
+
+
+### Re-ranking
+For the Re-ranking we used a huggingface BERT model fine-tuned on the MS-MARCO dataset.
+In order to run the Re-ranking follow the following steps:
+```
+
+python3 reranking.py
+```
+
+## Main runner
+
+Alternatively you could run the main file [conversational_passage_retrieval.py](src%conversational_passage_retrieval.py) which will run the baseline given specific parameters.
+
+### Parser Argument Documentation
+
+This document provides detailed information about the command-line arguments available for the parser. These arguments control various aspects of the data processing and model configuration.
+
+### Arguments
+
+### `--pre_process`
+
+- **Type**: `bool`
+- **Default**: `False`
+- **Description**: Enables or disables preprocessing of the dataset for Splade format.
+
+### `--model`
+- **Type**: `str`
+- **Choices**: `['a', 'b']`
+- **Default**: `'a'`
+- **Description**: Selects the model type. Option 'b' refers to the baseline model, and 'a' to the advanced model.
+
+### `--type`
+- **Type**: `str`
+- **Choices**: `['train', 'test']`
+- **Default**: `'train'`
+- **Description**: Specifies the type of queries to convert, either 'train' or 'test'.
+
+
+### `--qr`
+- **Type**: `bool`
+- **Default**: `True`
+- **Description**: Determines whether to use rewritten queries or not.
+
+### `--dataset`
+- **Type**: `str`
+- **Default**: `'../data/'`
+- **Description**: Path to the dataset.
+
+
+### `--output`
+- **Type**: `str`
+- **Default**: `'../res/'`
+- **Description**: Path for the output file.
+
+
+### `--ranking`
+- **Type**: `str`
+- **Choices**: `['bm25', 'splade']`
+- **Default**: `'splade'`
+- **Description**: Chooses the ranking method to be used.
+
+
+### `--res`
+- **Type**: `str`
+- **Default**: `'../res/'`
+- **Description**: Path to the preprocessed dataset.
 
 ### Question rewriting using Chat-GPT4
 
@@ -87,8 +169,6 @@ python3 -m splade.retrieve \
   config.out_dir=experiments/pre-trained/out
 ```
 
-## Re-ranking
-TODO
 
 ## Evaluation
 

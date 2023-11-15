@@ -329,17 +329,20 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
     None: The function does not return any value. It updates the output file with reranked document IDs 
           and their associated scores using the specified model.
     """
-
-    device = 'cuda' if torch.cuda.is_available() else 'mps'
+    device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     model = model.to(device)
+    model.eval()  # we are just evaluating
 
     for key, doc_ids in tqdm(res_dict.items()):
         # if the file already contains the key, skip it
-        with open(out_path, 'r') as f:
-            if key in f.read():
-                print(f'Query {key} already in the file')
-                continue
-            
+        try:
+            with open(out_path, 'r') as f:
+                if key in f.read():
+                    print(f'Query {key} already in the file')
+                    continue
+        except FileNotFoundError:
+            pass
+
         # read the query
         query = queries.loc[key]['query']
         scores = {}
@@ -364,10 +367,9 @@ def rerank(out_path, res_dict, queries, collection, tokenizer, model):
         sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
         # update the file with the ordered documents
-        with open(out_path, 'a') as f:
+        with open(out_path, 'a+') as f:
             for i, (doc_id, score) in enumerate(sorted_scores):
                 f.write(f'{key} Q0 {doc_id} {i+1} {score} bert \n')
-
 
 def splade_preprocess(path):
     """
