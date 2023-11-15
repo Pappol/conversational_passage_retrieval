@@ -88,10 +88,9 @@ def load_train_queries(stop_words, stemmer, dataset_path="../data/", use_rewritt
     """
     filename = 'queries_train_qr' if use_rewritten_query else 'queries_train'
     csv_filename = os.path.join(dataset_path, f'{filename}.csv')
-    tsv_filename = os.path.join(dataset_path, f'{filename}.tsv')
-    path = os.path.join(dataset_path,'preprocessed_', f'{filename}.tsv')
+    tsv_filename = os.path.join(dataset_path, f'preprocessed_{filename}.tsv')
     # look if preprocessed queries are present
-    if not os.path.isfile(path):
+    if not os.path.isfile(tsv_filename):
         print('Preprocessing train queries...')
         train_querys = pd.read_csv(csv_filename, sep=',')
         train_querys['processed_query'] = multiprocess_preprocess_joblib(train_querys, 'query', stop_words, stemmer)
@@ -123,8 +122,8 @@ def load_test_queries(stop_words, stemmer, dataset_path, use_rewritten_query):
 
     """
     filename = 'queries_test_qr' if use_rewritten_query else 'queries_test'
-    tsv_path = os.path.join(dataset_path, f'preprocessed_{filename}.tsv')
     csv_path = os.path.join(dataset_path, f'{filename}.csv')
+    tsv_path = os.path.join(dataset_path, f'preprocessed_{filename}.tsv')
     # look if preprocessed queries are present
     if not os.path.isfile(tsv_path):
         print('Preprocessing test queries...')
