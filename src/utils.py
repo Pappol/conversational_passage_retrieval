@@ -124,7 +124,7 @@ def load_test_queries(stop_words, stemmer, dataset_path, use_rewritten_query):
     """
     filename = 'queries_test_qr' if use_rewritten_query else 'queries_test'
     tsv_path = os.path.join(dataset_path, f'preprocessed_{filename}.tsv')
-    csv_path = os.path.join(dataset_path, f'preprocessed_{filename}.csv')
+    csv_path = os.path.join(dataset_path, f'{filename}.csv')
     # look if preprocessed queries are present
     if not os.path.isfile(tsv_path):
         print('Preprocessing test queries...')
