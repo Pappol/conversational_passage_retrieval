@@ -71,7 +71,7 @@ def multiprocess_preprocess_joblib(data, column_name, stop_words, stemmer, n_job
     return processed_data
 
 
-def load_train_queries(stop_words, stemmer, dataset_path, use_rewritten_query=False):
+def load_train_queries(stop_words, stemmer, dataset_path="../data/", use_rewritten_query=False):
     """
     This function loads the train queries and preprocesses them.
 
@@ -142,7 +142,7 @@ def load_test_queries(stop_words, stemmer, dataset_path, use_rewritten_query):
     return test_querys
 
 
-def load_dataset(stop_words, stemmer, dataset_path):
+def load_dataset(stop_words, stemmer, dataset_path= "../data/"):
     """
     This function loads the collection and preprocesses it.
 
