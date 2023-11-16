@@ -153,7 +153,7 @@ The file with the rewritten queries is included in the repository [queries_test_
 ```
 conda activate splade_env
 export PYTHONPATH=$PYTHONPATH:$(pwd)
-export SPLADE_CONFIG_NAME="config_splade++_cocondenser_ensembledistil"
+export SPLADE_CONFIG_NAME="config_splade++_cocondenser_ensembledistil_OURS"
 ```
 6. Run indexing:
 ```
@@ -162,7 +162,8 @@ python3 -m splade.index \
   config.pretrained_no_yamlconfig=true \
   config.index_dir=experiments/pre-trained/index
 ```
-7. Run ranking:
+7. Move queries in the tsv format to `data/msmarco/dev_queries/raw.tsv` (use [convert_csv_to_tsv.py](src%2Fconvert_csv_to_tsv.py) in case of csv file).
+8. Run ranking:
 ```
 python3 -m splade.retrieve \
   init_dict.model_type_or_dir=naver/splade-cocondenser-ensembledistil \
