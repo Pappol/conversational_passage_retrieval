@@ -1,6 +1,8 @@
 # Conversational Passage Retrieval
 
-This is a repo focused on conversational passage retrieval for course DAT640 at the University of Stavanger. 
+This is a repo focused on conversational passage retrieval for course DAT640 at the University of Stavanger. The report for this project can be found [Conversational Passage Retrieval.pdf](Conversational%20Passage%20Retrieval.pdf).
+
+
 ### Results
 All the results are in the [res](res) folder.
 
